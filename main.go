@@ -16,7 +16,7 @@ func main() {
 	log.Printf("Brisk v%s started", version)
 	err := godotenv.Load()
 	if err != nil {
-		log.Print("Can't find .env file, using default os env")
+		log.Print("can't find .env file, using default os env")
 	}
 
 	storage.Open()

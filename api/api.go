@@ -15,9 +15,7 @@ func Init() {
 	app.Use("/api", middleware.CheckCredential)
 
 	app.Put("/api/v1/credential", SaveNewPair)
-	app.Post("/api/v1/link", func(c *fiber.Ctx) {
-
-	})
+	app.Put("/api/v1/link", CreateLink)
 
 	app.Listen(3000)
 }
