@@ -1,0 +1,19 @@
+package api
+
+import (
+	"github.com/gofiber/fiber"
+)
+
+// Init the api http app
+func Init() {
+	app := fiber.New(&fiber.Settings{
+		DisableStartupMessage: true,
+	})
+
+	// add routes
+	app.Post("/api/v1/link", func(c *fiber.Ctx) {
+
+	})
+
+	app.Listen(3000)
+}
