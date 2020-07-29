@@ -2,6 +2,8 @@ package api
 
 import (
 	"log"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber"
@@ -11,6 +13,7 @@ import (
 
 type createLinkBody struct {
 	URL string `json:"url" xml:"url" form:"url"`
+	TTL int    `json:"ttl" xml:"ttl" form:"ttl"`
 }
 
 // CreateLink request to create a new link
@@ -22,15 +25,34 @@ func CreateLink(c *fiber.Ctx) {
 		return
 	}
 
+	// Check the TTL requested
+	maxTTL, _ := strconv.Atoi(os.Getenv("MAX_LINK_TTL"))
+	if body.TTL > maxTTL {
+		c.SendStatus(400)
+		return
+	}
+
 	// Create the link
 	slug := utils.RandomString(7)
 	link := &storage.Link{
-		Slug:             slug,
-		URL:              body.URL,
-		CreateAtTimetamp: int32(time.Now().Unix()),
+		Slug:              slug,
+		URL:               body.URL,
+		TTL:               body.TTL,
+		Owner:             c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
+		CreateAtTimestamp: int32(time.Now().Unix()),
 	}
-	log.Printf("new link created slug=%s url=%s", link.Slug, link.URL)
+	storage.SaveLink(link)
+	log.Printf("new link created slug=%s url=%s owner=%s", link.Slug, link.URL, link.Owner)
 	c.JSON(map[string]interface{}{
 		"slug": slug,
 	})
+}
+
+func GetLink(c *fiber.Ctx) {
+	link := storage.FindLink(c.Params("slug"))
+	if link == nil {
+		c.Send("Not found")
+		return
+	}
+	c.Redirect(link.URL)
 }

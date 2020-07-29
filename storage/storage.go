@@ -1,8 +1,10 @@
 package storage
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	badger "github.com/dgraph-io/badger/v2"
 )
@@ -40,4 +42,32 @@ func FindSecretByID(id string) string {
 		return err
 	})
 	return secret
+}
+
+// SaveLink save a new link in the db
+func SaveLink(link *Link) error {
+	err := db.Update(func(txn *badger.Txn) error {
+		payload, _ := json.Marshal(link)
+		duration := time.Millisecond * time.Duration(link.TTL)
+		e := badger.NewEntry([]byte(fmt.Sprintf("link_%s", link.Slug)), []byte(string(payload))).WithTTL(time.Hour).WithTTL(duration)
+		err := txn.SetEntry(e)
+		return err
+	})
+	return err
+}
+
+func FindLink(slug string) *Link {
+	var link *Link = nil
+	db.View(func(txn *badger.Txn) error {
+		item, err := txn.Get([]byte(fmt.Sprintf("link_%s", slug)))
+		if err != nil {
+			return err
+		}
+		item.Value(func(v []byte) error {
+			err = json.Unmarshal(v, &link)
+			return nil
+		})
+		return err
+	})
+	return link
 }
