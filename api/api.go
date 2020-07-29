@@ -13,6 +13,7 @@ func Init() {
 
 	// Apply middleware
 	app.Use("/api", middleware.CheckCredential)
+	app.Use("/api/v1/admin", middleware.CheckMasterCredential)
 
 	app.Put("/api/v1/credential", SaveNewPair)
 	app.Put("/api/v1/link", CreateLink)

@@ -79,3 +79,8 @@ func DeleteLink(slug string) error {
 	})
 	return err
 }
+
+func FindAllLinks() []*Link {
+	links := []*Link{}
+	return links
+}
