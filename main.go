@@ -10,7 +10,7 @@ import (
 )
 
 // version is the string ref of the version of brisk
-var version = "0.0.1"
+var version = "1.0.0"
 
 func main() {
 	log.Printf("Brisk v%s started", version)

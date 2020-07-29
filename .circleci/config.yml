@@ -10,9 +10,14 @@ jobs:
       - run: go get -v -t -d ./...
       - run: go build -o ./bin/brisk
       - run: docker build -t nightwolf93/brisk:$CIRCLE_BRANCH .
-      - run: docker tag nightwolf93/brisk:$CIRCLE_BRANCH cloud.canister.io:5000/nightwolf93/brisk:$CIRCLE_BRANCH
-      - run: docker tag nightwolf93/brisk:$CIRCLE_BRANCH nightwolf931/brisk:$CIRCLE_BRANCH
-      - run: docker login --username=$CANISTER_ID --password=$CANISTER_PASS cloud.canister.io:5000
+      - run: docker tag nightwolf93/brisk:$CIRCLE_BRANCH nightwolf931/brisk:latest
       - run: docker login --username=$DOCKERHUB_USERNAME --password=$DOCKERHUB_PASS
-      - run: docker push cloud.canister.io:5000/nightwolf93/brisk:$CIRCLE_BRANCH
-      - run: docker push nightwolf931/brisk:$CIRCLE_BRANCH
+      - run: docker push nightwolf931/brisk:latest
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
