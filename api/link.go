@@ -16,6 +16,10 @@ type createLinkBody struct {
 	TTL int    `json:"ttl" xml:"ttl" form:"ttl"`
 }
 
+type deleteLinkBody struct {
+	Slug string `json:"slug" xml:"slug" form:"slug"`
+}
+
 // CreateLink request to create a new link
 func CreateLink(c *fiber.Ctx) {
 	// Parse body
@@ -48,6 +52,7 @@ func CreateLink(c *fiber.Ctx) {
 	})
 }
 
+// GetLink redirect to a link by the slug
 func GetLink(c *fiber.Ctx) {
 	link := storage.FindLink(c.Params("slug"))
 	if link == nil {
@@ -55,4 +60,33 @@ func GetLink(c *fiber.Ctx) {
 		return
 	}
 	c.Redirect(link.URL)
+}
+
+// DeleteLink request to delete a link
+func DeleteLink(c *fiber.Ctx) {
+	// Parse body
+	body := new(deleteLinkBody)
+	if err := c.BodyParser(body); err != nil {
+		c.SendStatus(400)
+		return
+	}
+
+	link := storage.FindLink(body.Slug)
+
+	// Check if the link exist
+	if link == nil {
+		c.SendStatus(400)
+		return
+	}
+
+	// Check if is the link owner
+	if link.Owner != c.Locals("credential").(*storage.ClientPairCredentials).ClientID {
+		c.SendStatus(400)
+		return
+	}
+
+	log.Printf("link deleted slug=%s", link.Slug)
+	storage.DeleteLink(link.Slug)
+
+	c.SendStatus(200)
 }

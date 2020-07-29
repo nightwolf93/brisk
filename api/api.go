@@ -16,6 +16,7 @@ func Init() {
 
 	app.Put("/api/v1/credential", SaveNewPair)
 	app.Put("/api/v1/link", CreateLink)
+	app.Delete("/api/v1/link", DeleteLink)
 	app.Get("/:slug", GetLink)
 
 	app.Listen(3000)

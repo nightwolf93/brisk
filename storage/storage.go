@@ -71,3 +71,11 @@ func FindLink(slug string) *Link {
 	})
 	return link
 }
+
+func DeleteLink(slug string) error {
+	err := db.Update(func(txn *badger.Txn) error {
+		err := txn.Delete([]byte(fmt.Sprintf("link_%s", slug)))
+		return err
+	})
+	return err
+}

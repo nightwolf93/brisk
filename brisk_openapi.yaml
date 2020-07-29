@@ -71,6 +71,32 @@ paths:
                     description: Malformated request or the TTL is too high
                 '401':
                     description: Wrong credentials
+        delete:
+            summary: Delete a link
+            tags:
+                - Link
+            parameters:
+                - in: header
+                  name: "x-client-id"
+                  schema:
+                    type: string
+                - in: header
+                  name: "x-client-secret"
+                  schema:
+                    type: string
+            requestBody:
+                required: true
+                content:
+                    application/x-www-form-urlencoded:
+                        schema:
+                            $ref: '#/components/schemas/DeleteLinkRequest'
+            responses:
+                '200':
+                    description: The link has been deleted
+                '400':
+                    description: Malformated request or the slug is invalid
+                '401':
+                    description: Wrong credentials
 components:
     schemas:
         CreateCredentialRequest:
@@ -99,6 +125,14 @@ components:
                     example: 900000
         CreateLinkResponse:
             type: object
+            properties:
+                slug:
+                    type: string
+                    example: "hygGbkV"
+        DeleteLinkRequest:
+            type: object
+            required:
+                - slug
             properties:
                 slug:
                     type: string
