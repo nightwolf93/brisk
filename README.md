@@ -4,8 +4,8 @@
 Brisk is a simple url shortener API.  
 It will allow you to create short url for temporary url like for a 2FA system.
 
-## API
-WIP
+## Documentation
+https://petstore.swagger.io/?url=https://raw.githubusercontent.com/nightwolf93/brisk/master/brisk_openapi.yaml
 
 ## Authors
 Nightwolf93
