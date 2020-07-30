@@ -38,13 +38,24 @@ func CreateLink(c *fiber.Ctx) {
 	}
 
 	// Check slug length
-	if body.SlugLength > 20 || body.SlugLength < 1 {
+	if body.SlugLength > 20 || body.SlugLength < 3 {
 		c.SendStatus(400)
 		return
 	}
 
 	// Create the link
-	slug := utils.RandomString(body.SlugLength)
+	slug := ""
+	for i := 0; i < 10; i++) {
+		slug = utils.RandomString(body.SlugLength)
+		if storage.FindLink(slug) == nil {
+			break
+		}
+	} 
+	if storage.FindLink(slug) != nil {
+		c.SendStatus(409)
+		return
+	}
+
 	link := &storage.Link{
 		Slug:              slug,
 		URL:               body.URL,

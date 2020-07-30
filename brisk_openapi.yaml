@@ -71,6 +71,8 @@ paths:
                     description: Malformated request, the TTL is too high or the slug length is invalid (max 20)
                 '401':
                     description: Wrong credentials
+                '409':
+                    description: Can't generate a new link with this slug size
         delete:
             summary: Delete a link
             tags:
