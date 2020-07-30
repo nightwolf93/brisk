@@ -45,12 +45,12 @@ func CreateLink(c *fiber.Ctx) {
 
 	// Create the link
 	slug := ""
-	for i := 0; i < 10; i++) {
+	for i := 0; i < 10; i++ {
 		slug = utils.RandomString(body.SlugLength)
 		if storage.FindLink(slug) == nil {
 			break
 		}
-	} 
+	}
 	if storage.FindLink(slug) != nil {
 		c.SendStatus(409)
 		return
