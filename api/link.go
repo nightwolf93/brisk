@@ -12,8 +12,9 @@ import (
 )
 
 type createLinkBody struct {
-	URL string `json:"url" xml:"url" form:"url"`
-	TTL int    `json:"ttl" xml:"ttl" form:"ttl"`
+	URL        string `json:"url" xml:"url" form:"url"`
+	TTL        int    `json:"ttl" xml:"ttl" form:"ttl"`
+	SlugLength int    `json:"slug_length" xml:"slug_length" form:"slug_length"`
 }
 
 type deleteLinkBody struct {
@@ -36,8 +37,14 @@ func CreateLink(c *fiber.Ctx) {
 		return
 	}
 
+	// Check slug length
+	if body.SlugLength > 20 || body.SlugLength < 1 {
+		c.SendStatus(400)
+		return
+	}
+
 	// Create the link
-	slug := utils.RandomString(7)
+	slug := utils.RandomString(body.SlugLength)
 	link := &storage.Link{
 		Slug:              slug,
 		URL:               body.URL,

@@ -20,5 +20,7 @@ func Init() {
 	app.Delete("/api/v1/link", DeleteLink)
 	app.Get("/:slug", GetLink)
 
+	app.Get("/api/v1/admin/link", AdminGetAllLinks)
+
 	app.Listen(3000)
 }

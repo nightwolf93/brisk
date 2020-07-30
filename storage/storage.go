@@ -80,7 +80,25 @@ func DeleteLink(slug string) error {
 	return err
 }
 
-func FindAllLinks() []*Link {
+func FindAllLinks() ([]*Link, error) {
 	links := []*Link{}
-	return links
+	err := db.View(func(txn *badger.Txn) error {
+		it := txn.NewIterator(badger.DefaultIteratorOptions)
+		defer it.Close()
+		prefix := []byte("link_")
+		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
+			item := it.Item()
+			err := item.Value(func(v []byte) error {
+				var link *Link = nil
+				json.Unmarshal(v, &link)
+				links = append(links, link)
+				return nil
+			})
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	return links, err
 }
