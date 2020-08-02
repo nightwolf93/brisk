@@ -11,7 +11,7 @@ jobs:
       - run: rm -rf test-results && mkdir test-results
       - run: go test -v 2>&1 ./... | go-junit-report > ./test-results/report.xml
       - store_test_results:
-        path: test-results
+          path: test-results
       - run: go build -o ./bin/brisk
       - run: docker build -t nightwolf93/brisk:$CIRCLE_BRANCH .
       - run: docker tag nightwolf93/brisk:$CIRCLE_BRANCH nightwolf931/brisk:latest
