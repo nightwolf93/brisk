@@ -5,3 +5,5 @@ build:
 	go build -o ./bin/brisk
 docker: build
 	sudo docker build -t brisk .
+test:
+	go test ./...
