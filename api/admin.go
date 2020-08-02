@@ -5,6 +5,7 @@ import (
 	"github.com/nightwolf93/brisk/storage"
 )
 
+// AdminGetAllLinks get all links stored into the db
 func AdminGetAllLinks(c *fiber.Ctx) {
 	links, err := storage.FindAllLinks()
 	if err != nil {

@@ -14,6 +14,7 @@ import (
 type createLinkBody struct {
 	URL        string `json:"url" xml:"url" form:"url"`
 	TTL        int    `json:"ttl" xml:"ttl" form:"ttl"`
+	Slug       string `json:"slug" xml:"slug" form:"slug"`
 	SlugLength int    `json:"slug_length" xml:"slug_length" form:"slug_length"`
 }
 
@@ -45,11 +46,19 @@ func CreateLink(c *fiber.Ctx) {
 
 	// Create the link
 	slug := ""
-	for i := 0; i < 10; i++ {
-		slug = utils.RandomString(body.SlugLength)
-		if storage.FindLink(slug) == nil {
-			break
+	if len(body.Slug) == 0 {
+		for i := 0; i < 10; i++ {
+			slug = utils.RandomString(body.SlugLength)
+			if storage.FindLink(slug) == nil {
+				break
+			}
 		}
+	} else {
+		if len(body.Slug) > 20 {
+			c.SendStatus(400)
+			return
+		}
+		slug = body.Slug
 	}
 	if storage.FindLink(slug) != nil {
 		c.SendStatus(409)
