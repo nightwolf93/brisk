@@ -6,4 +6,6 @@ build:
 docker: build
 	sudo docker build -t brisk .
 test:
-	go test ./...
+	rm -rf test-results
+	mkdir test-results
+	go test -v 2>&1 ./... | go-junit-report > ./test-results/report.xml
