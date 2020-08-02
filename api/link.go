@@ -47,7 +47,7 @@ func CreateLink(c *fiber.Ctx) {
 	// Create the link
 	slug := ""
 	if len(body.Slug) == 0 {
-		for i := 0; i < 10; i++ {
+		for i := 0; i < 32; i++ {
 			slug = utils.RandomString(body.SlugLength)
 			if storage.FindLink(slug) == nil {
 				break
@@ -86,6 +86,8 @@ func GetLink(c *fiber.Ctx) {
 		c.Send("Not found")
 		return
 	}
+	link.VisitAmount = link.VisitAmount + 1
+	storage.SaveLink(link)
 	c.Redirect(link.URL)
 }
 

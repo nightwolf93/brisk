@@ -1,145 +1,148 @@
 openapi: "3.0.0"
 info:
-    version: 1.0.0
-    title: Brisk API
+  version: 1.0.0
+  title: Brisk API
 paths:
-    /api/v1/credential:
-        put:
-            summary: Create new credential
-            tags:
-                - Auth
-            parameters:
-                - in: header
-                  name: "x-client-id"
-                  schema:
-                    type: string
-                - in: header
-                  name: "x-client-secret"
-                  schema:
-                    type: string
-            requestBody:
-                required: true
-                content:
-                   application/x-www-form-urlencoded:
-                        schema:
-                            $ref: '#/components/schemas/CreateCredentialRequest' 
-            responses:
-                '200':
-                    description: The credential has benn created
-                '400':
-                    description: Malformated request
-                '401':
-                    description: You are not allowed to create credential, use the master credential for that
-                '409':
-                    description: The credential already exist
-    /:slug:
-        get:
-            summary: Visit a link
-            tags:
-                - Link
-            responses:
-                '200':
-                    description: Redirect you to the URL
-    /api/v1/link:
-        put:
-            summary: Create new link
-            tags:
-                - Link
-            parameters:
-                - in: header
-                  name: "x-client-id"
-                  schema:
-                    type: string
-                - in: header
-                  name: "x-client-secret"
-                  schema:
-                    type: string
-            requestBody:
-                required: true
-                content:
-                    application/x-www-form-urlencoded:
-                        schema:
-                            $ref: '#/components/schemas/CreateLinkRequest'
-            responses:
-                '200':
-                    description: The link has been created
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CreateLinkResponse'
-                '400':
-                    description: Malformated request, the TTL is too high or the slug length is invalid (max 20)
-                '401':
-                    description: Wrong credentials
-                '409':
-                    description: Can't generate a new link with this slug size
-        delete:
-            summary: Delete a link
-            tags:
-                - Link
-            parameters:
-                - in: header
-                  name: "x-client-id"
-                  schema:
-                    type: string
-                - in: header
-                  name: "x-client-secret"
-                  schema:
-                    type: string
-            requestBody:
-                required: true
-                content:
-                    application/x-www-form-urlencoded:
-                        schema:
-                            $ref: '#/components/schemas/DeleteLinkRequest'
-            responses:
-                '200':
-                    description: The link has been deleted
-                '400':
-                    description: Malformated request or the slug is invalid
-                '401':
-                    description: Wrong credentials
+  /api/v1/credential:
+    put:
+      summary: Create new credential
+      tags:
+        - Auth
+      parameters:
+        - in: header
+          name: "x-client-id"
+          schema:
+            type: string
+        - in: header
+          name: "x-client-secret"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CreateCredentialRequest"
+      responses:
+        "200":
+          description: The credential has benn created
+        "400":
+          description: Malformated request
+        "401":
+          description: You are not allowed to create credential, use the master credential for that
+        "409":
+          description: The credential already exist
+  /:slug:
+    get:
+      summary: Visit a link
+      tags:
+        - Link
+      responses:
+        "200":
+          description: Redirect you to the URL
+  /api/v1/link:
+    put:
+      summary: Create new link
+      tags:
+        - Link
+      parameters:
+        - in: header
+          name: "x-client-id"
+          schema:
+            type: string
+        - in: header
+          name: "x-client-secret"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CreateLinkRequest"
+      responses:
+        "200":
+          description: The link has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateLinkResponse"
+        "400":
+          description: Malformated request, the TTL is too high or the slug length is invalid (max 20)
+        "401":
+          description: Wrong credentials
+        "409":
+          description: Can't generate a new link with this slug size
+    delete:
+      summary: Delete a link
+      tags:
+        - Link
+      parameters:
+        - in: header
+          name: "x-client-id"
+          schema:
+            type: string
+        - in: header
+          name: "x-client-secret"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/DeleteLinkRequest"
+      responses:
+        "200":
+          description: The link has been deleted
+        "400":
+          description: Malformated request or the slug is invalid
+        "401":
+          description: Wrong credentials
 components:
-    schemas:
-        CreateCredentialRequest:
-            type: object
-            required:
-                - client_id
-                - client_secret
-            properties:
-                client_id:
-                    type: string
-                    example: "jkenfjek5141zdzuy"
-                client_secret:
-                    type: string
-                    example: "52sddjhbv866bcd"
-        CreateLinkRequest:
-            type: object
-            required:
-                - url
-                - ttl
-                - slug_length
-            properties:
-                url:
-                    type: string
-                    example: "https://github.com/nightwolf93/brisk"
-                ttl:
-                    type: integer
-                    example: 900000
-                slug_length:
-                    type: integer
-                    example: 6
-        CreateLinkResponse:
-            type: object
-            properties:
-                slug:
-                    type: string
-                    example: "hygGbkV"
-        DeleteLinkRequest:
-            type: object
-            required:
-                - slug
-            properties:
-                slug:
-                    type: string
-                    example: "hygGbkV"
+  schemas:
+    CreateCredentialRequest:
+      type: object
+      required:
+        - client_id
+        - client_secret
+      properties:
+        client_id:
+          type: string
+          example: "jkenfjek5141zdzuy"
+        client_secret:
+          type: string
+          example: "52sddjhbv866bcd"
+    CreateLinkRequest:
+      type: object
+      required:
+        - url
+        - ttl
+        - slug_length
+      properties:
+        url:
+          type: string
+          example: "https://github.com/nightwolf93/brisk"
+        ttl:
+          type: integer
+          example: 900000
+        slug_length:
+          type: integer
+          example: 6
+        slug:
+          type: string
+          example: "hygGbkV"
+    CreateLinkResponse:
+      type: object
+      properties:
+        slug:
+          type: string
+          example: "hygGbkV"
+    DeleteLinkRequest:
+      type: object
+      required:
+        - slug
+      properties:
+        slug:
+          type: string
+          example: "hygGbkV"
