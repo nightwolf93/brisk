@@ -8,6 +8,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: go get -v -t -d ./...
+      - run: go get -u github.com/jstemmer/go-junit-report
       - run: rm -rf test-results && mkdir test-results
       - run: go test -v 2>&1 ./... | go-junit-report > ./test-results/report.xml
       - store_test_results:
