@@ -53,8 +53,6 @@ func CallWebhooks(binding string, payload interface{}) {
 			continue
 		}
 		defer resp.Body.Close()
-
-		log.Printf("Status code %d", resp.Status)
 	}
 }
 
