@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/nightwolf93/brisk/webhook"
 	"log"
 	"os"
 	"strconv"
@@ -73,6 +74,12 @@ func CreateLink(c *fiber.Ctx) {
 		CreateAtTimestamp: int32(time.Now().Unix()),
 	}
 	storage.SaveLink(link)
+
+	// Call webhooks
+	webhook.CallWebhooks("new_link", map[string]interface{}{
+		"slug": slug,
+	})
+
 	log.Printf("new link created slug=%s url=%s owner=%s", link.Slug, link.URL, link.Owner)
 	c.JSON(map[string]interface{}{
 		"slug": slug,

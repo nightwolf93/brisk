@@ -7,6 +7,7 @@ import (
 	"github.com/nightwolf93/brisk/api"
 	"github.com/nightwolf93/brisk/auth"
 	"github.com/nightwolf93/brisk/storage"
+	"github.com/nightwolf93/brisk/webhook"
 )
 
 // version is the string ref of the version of brisk
@@ -21,5 +22,6 @@ func main() {
 
 	storage.Open()
 	auth.InitMasterPair()
+	webhook.Init()
 	api.Init()
 }
