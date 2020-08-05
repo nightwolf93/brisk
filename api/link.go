@@ -76,7 +76,7 @@ func CreateLink(c *fiber.Ctx) {
 	storage.SaveLink(link)
 
 	// Call webhooks
-	webhook.CallWebhooks("new_link", map[string]interface{}{
+	go webhook.CallWebhooks("new_link", map[string]interface{}{
 		"slug": slug,
 	})
 
@@ -95,6 +95,19 @@ func GetLink(c *fiber.Ctx) {
 	}
 	link.VisitAmount = link.VisitAmount + 1
 	storage.SaveLink(link)
+
+	// Call webhooks
+	go webhook.CallWebhooks("visit_link", map[string]interface{}{
+		"link": map[string]interface{}{
+			"slug":           link.Slug,
+			"visitor_amount": link.VisitAmount,
+			"url":            link.URL,
+		},
+		"visitor": map[string]interface{}{
+			"ip": c.IP(),
+		},
+	})
+
 	c.Redirect(link.URL)
 }
 
