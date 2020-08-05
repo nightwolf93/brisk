@@ -113,6 +113,12 @@ paths:
           name: "x-client-secret"
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterWebhookRequest"
       responses:
         "200":
           description: Webhook registered with success
@@ -167,3 +173,17 @@ components:
         slug:
           type: string
           example: "hygGbkV"
+    RegisterWebhookRequest:
+      type: object
+      required:
+        - url
+        - bindings
+      properties:
+        url:
+          type: string
+          example: "https://......"
+        bindings:
+          type: array
+          items:
+            type: string
+          example: ["visit_link", "new_link"]
