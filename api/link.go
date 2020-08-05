@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/nightwolf93/brisk/webhook"
 	"log"
 	"os"
@@ -86,6 +87,7 @@ func CreateLink(c *fiber.Ctx) {
 	log.Printf("new link created slug=%s url=%s owner=%s", link.Slug, link.URL, link.Owner)
 	c.JSON(map[string]interface{}{
 		"slug": slug,
+		"url":  fmt.Sprintf("%s/%s", os.Getenv("BASE_URL"), slug),
 	})
 }
 
@@ -105,7 +107,7 @@ func GetLink(c *fiber.Ctx) {
 			"slug":           link.Slug,
 			"visitor_amount": link.VisitAmount,
 			"url":            link.URL,
-			"owner":          c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
+			"owner":          link.Owner,
 		},
 		"visitor": map[string]interface{}{
 			"ip": c.IP(),
