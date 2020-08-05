@@ -42,6 +42,7 @@ func CallWebhooks(binding string, payload interface{}) {
 	for _, webhook := range GetWebhooksByBinding(binding) {
 		jsonStr, _ := json.Marshal(payload)
 		req, err := http.NewRequest("POST", webhook.URL, bytes.NewBuffer(jsonStr))
+		log.Printf("call webhook url=%s binding=%s", webhook.URL, binding)
 		if err != nil {
 			log.Printf("error when calling the webhook url=%s", webhook.URL)
 			continue
@@ -53,6 +54,9 @@ func CallWebhooks(binding string, payload interface{}) {
 			continue
 		}
 		defer resp.Body.Close()
+		if resp.StatusCode == 404 || resp.StatusCode == 500 {
+			log.Printf("remote webhook answer with a invalid status code code=%d", resp.StatusCode)
+		}
 	}
 }
 

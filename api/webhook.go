@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gofiber/fiber"
+	"github.com/nightwolf93/brisk/webhook"
 )
 
 type createWebhookBody struct {
@@ -17,4 +18,9 @@ func RegisterWebhook(c *fiber.Ctx) {
 		c.SendStatus(400)
 		return
 	}
+	w := &webhook.Webhook{
+		URL:      body.URL,
+		Bindings: body.Bindings,
+	}
+	webhook.AddWebhook(w)
 }

@@ -77,7 +77,10 @@ func CreateLink(c *fiber.Ctx) {
 
 	// Call webhooks
 	go webhook.CallWebhooks("new_link", map[string]interface{}{
-		"slug": slug,
+		"slug":       slug,
+		"owner":      c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
+		"created_at": link.CreateAtTimestamp,
+		"ttl":        link.TTL,
 	})
 
 	log.Printf("new link created slug=%s url=%s owner=%s", link.Slug, link.URL, link.Owner)
@@ -102,6 +105,7 @@ func GetLink(c *fiber.Ctx) {
 			"slug":           link.Slug,
 			"visitor_amount": link.VisitAmount,
 			"url":            link.URL,
+			"owner":          c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
 		},
 		"visitor": map[string]interface{}{
 			"ip": c.IP(),
