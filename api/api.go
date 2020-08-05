@@ -3,6 +3,9 @@ package api
 import (
 	"github.com/gofiber/fiber"
 	"github.com/nightwolf93/brisk/auth/middleware"
+	"log"
+	"os"
+	"strconv"
 )
 
 // Init the api http app
@@ -29,5 +32,10 @@ func Init() {
 	// Admin
 	app.Get("/api/v1/admin/link", AdminGetAllLinks)
 
-	app.Listen(3000)
+	port := 3000
+	if os.Getenv("PORT") != "" {
+		port, _ = strconv.Atoi(os.Getenv("PORT"))
+	}
+	log.Printf("listen on *:%d", port)
+	app.Listen(port)
 }
