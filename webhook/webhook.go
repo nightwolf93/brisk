@@ -10,6 +10,7 @@ import (
 // Webhook represent a webhook
 type Webhook struct {
 	URL      string
+	Owner    string
 	Bindings []string
 }
 

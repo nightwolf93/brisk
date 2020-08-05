@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gofiber/fiber"
+	"github.com/nightwolf93/brisk/storage"
 	"github.com/nightwolf93/brisk/webhook"
 )
 
@@ -21,6 +22,7 @@ func RegisterWebhook(c *fiber.Ctx) {
 	w := &webhook.Webhook{
 		URL:      body.URL,
 		Bindings: body.Bindings,
+		Owner:    c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
 	}
 	webhook.AddWebhook(w)
 }

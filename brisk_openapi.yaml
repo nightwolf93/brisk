@@ -99,6 +99,27 @@ paths:
           description: Malformated request or the slug is invalid
         "401":
           description: Wrong credentials
+  /api/v1/webhook:
+    put:
+      summary: Register a webhook
+      tags:
+        - Webhook
+      parameters:
+        - in: header
+          name: "x-client-id"
+          schema:
+            type: string
+        - in: header
+          name: "x-client-secret"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Webhook registered with success
+        "400":
+          description: Malformated request or the slug is invalid
+        "401":
+          description: Wrong credentials
 components:
   schemas:
     CreateCredentialRequest:
