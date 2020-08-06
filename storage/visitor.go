@@ -36,7 +36,11 @@ func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
 		geo, err := geoip.New()
 		if err == nil {
 			country := geo.Lookup(net.ParseIP(ip))
-			visitor.Location = country.Long
+			if country != nil {
+				visitor.Location = country.Long
+			} else {
+				visitor.Location = "Not found"
+			}
 		} else {
 			log.Printf("can't determine the location for the visitor: %s", err.Error())
 		}
