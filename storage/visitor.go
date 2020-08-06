@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber"
 	"log"
 	"net"
+	"strings"
 	"time"
 )
 
@@ -20,7 +21,7 @@ type VisitorEntry struct {
 func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
 	ip := ""
 	if string(c.Fasthttp.Request.Header.Peek("X-Forwarded-For")) != "" {
-		ip = string(c.Fasthttp.Request.Header.Peek("X-Forwarded-For"))
+		ip = strings.Split(string(c.Fasthttp.Request.Header.Peek("X-Forwarded-For")), ",")[0]
 	} else {
 		ip = c.IP()
 	}
