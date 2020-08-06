@@ -1,3 +1,5 @@
+![logo](https://github.com/nightwolf93/brisk/blob/master/logo.png?raw=true)
+
 # Brisk
 
 [![CircleCI](https://circleci.com/gh/nightwolf93/brisk.svg?style=svg)](https://github.com/nightwolf93/brisk)
