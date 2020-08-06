@@ -25,7 +25,6 @@ func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
 	} else {
 		ip = c.IP()
 	}
-	log.Printf("%s", ip)
 
 	visitor := &VisitorEntry{}
 	visitor.IP = ip
@@ -44,7 +43,6 @@ func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
 	} else {
 		visitor.Location = "Localhost"
 	}
-	log.Printf("%s", visitor.Location)
 
 	return visitor
 }
