@@ -18,8 +18,14 @@ type VisitorEntry struct {
 
 // GetVisitorEntryByFiberCtx get a new visitor entry from a fiber context
 func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
+	ip := ""
+	if string(c.Fasthttp.Request.Header.Peek("X-Forwarded-For")) != "" {
+		ip = string(c.Fasthttp.Request.Header.Peek("X-Forwarded-For"))
+	} else {
+		ip = c.IP()
+	}
 	visitor := &VisitorEntry{}
-	visitor.IP = c.IP()
+	visitor.IP = ip
 	visitor.Referrer = string(c.Fasthttp.Referer())
 	visitor.Timestamp = int32(time.Now().Unix())
 
@@ -27,7 +33,7 @@ func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
 	if c.IP() != "127.0.0.1" {
 		geo, err := geoip.New()
 		if err == nil {
-			country := geo.Lookup(net.ParseIP(c.IP()))
+			country := geo.Lookup(net.ParseIP(ip))
 			visitor.Location = country.Long
 		} else {
 			log.Printf("can't determine the location for the visitor: %s", err.Error())
