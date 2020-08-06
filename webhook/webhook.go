@@ -9,9 +9,9 @@ import (
 
 // Webhook represent a webhook
 type Webhook struct {
-	URL      string
-	Owner    string
-	Bindings []string
+	URL      string   `json:"url"`
+	Owner    string   `json:"owner"`
+	Bindings []string `json:"bindings"`
 }
 
 var webhooks []*Webhook
@@ -19,6 +19,10 @@ var webhooks []*Webhook
 // Init init webhook system
 func Init() {
 	webhooks = make([]*Webhook, 0)
+}
+
+func GetWebhooks() []*Webhook {
+	return webhooks
 }
 
 // AddWebhook add a new webhook

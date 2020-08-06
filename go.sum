@@ -2,6 +2,10 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/DataDog/zstd v1.4.1 h1:3oxKN3wbHibqx897utPC2LTQU4J+IHWWJO+glkAkpFM=
 github.com/DataDog/zstd v1.4.1/go.mod h1:1jcaCB/ufaK+sKp1NBhlGmpz41jOoPQ35bpF36t7BBo=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
+github.com/alecthomas/geoip v0.0.0-20150318225830-ef86b5d4cf8b h1:p1tw0h0uzgG0HHoUV9OaNqaA72qtj18IPlZf8//oI/M=
+github.com/alecthomas/geoip v0.0.0-20150318225830-ef86b5d4cf8b/go.mod h1:bCspdM+57aOQGxehDpVrUIsMMIRQGh/17lb/A3m+T4I=
+github.com/alecthomas/gobundle v0.0.0-20151026125332-e2f55dbde06a h1:p4f70DPN4CsOIs9/zLFHT7gKWIE3JwTDBQnSldTK5mw=
+github.com/alecthomas/gobundle v0.0.0-20151026125332-e2f55dbde06a/go.mod h1:vGNfA1/qkeoRWd8C6gFZ7CmBjGyOJ5ny743fRttZ1L0=
 github.com/andybalholm/brotli v1.0.0 h1:7UCwP93aiSfvWpapti8g88vVVGp2qqtGyePsSuDafo4=
 github.com/andybalholm/brotli v1.0.0/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=

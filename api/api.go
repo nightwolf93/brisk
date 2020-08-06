@@ -31,6 +31,7 @@ func Init() {
 
 	// Admin
 	app.Get("/api/v1/admin/link", AdminGetAllLinks)
+	app.Get("/api/v1/admin/webhook", AdminGetWebhooks)
 
 	port := 3000
 	if os.Getenv("PORT") != "" {

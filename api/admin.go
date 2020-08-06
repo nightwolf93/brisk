@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gofiber/fiber"
 	"github.com/nightwolf93/brisk/storage"
+	"github.com/nightwolf93/brisk/webhook"
 )
 
 // AdminGetAllLinks get all links stored into the db
@@ -13,4 +14,8 @@ func AdminGetAllLinks(c *fiber.Ctx) {
 		return
 	}
 	c.JSON(links)
+}
+
+func AdminGetWebhooks(c *fiber.Ctx) {
+	c.JSON(webhook.GetWebhooks())
 }

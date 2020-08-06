@@ -14,10 +14,11 @@ import (
 )
 
 type createLinkBody struct {
-	URL        string `json:"url" xml:"url" form:"url"`
-	TTL        int    `json:"ttl" xml:"ttl" form:"ttl"`
-	Slug       string `json:"slug" xml:"slug" form:"slug"`
-	SlugLength int    `json:"slug_length" xml:"slug_length" form:"slug_length"`
+	URL        string   `json:"url" xml:"url" form:"url"`
+	TTL        int      `json:"ttl" xml:"ttl" form:"ttl"`
+	Slug       string   `json:"slug" xml:"slug" form:"slug"`
+	SlugLength int      `json:"slug_length" xml:"slug_length" form:"slug_length"`
+	Services   []string `json:"services" xml:"services" form:"services"`
 }
 
 type deleteLinkBody struct {
@@ -101,6 +102,8 @@ func GetLink(c *fiber.Ctx) {
 	link.VisitAmount = link.VisitAmount + 1
 	storage.SaveLink(link)
 
+	visitorEntry := storage.GetVisitorEntryByFiberCtx(c)
+
 	// Call webhooks
 	go webhook.CallWebhooks("visit_link", map[string]interface{}{
 		"link": map[string]interface{}{
@@ -109,9 +112,7 @@ func GetLink(c *fiber.Ctx) {
 			"url":            link.URL,
 			"owner":          link.Owner,
 		},
-		"visitor": map[string]interface{}{
-			"ip": c.IP(),
-		},
+		"visitor": visitorEntry,
 	})
 
 	c.Redirect(link.URL)
