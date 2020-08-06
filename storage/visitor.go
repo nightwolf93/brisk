@@ -25,6 +25,8 @@ func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
 	} else {
 		ip = c.IP()
 	}
+	log.Printf("%s", ip)
+
 	visitor := &VisitorEntry{}
 	visitor.IP = ip
 	visitor.Referrer = string(c.Fasthttp.Referer())
