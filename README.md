@@ -7,7 +7,7 @@ It will allow you to create short url for temporary url like for a 2FA system.
 
 ## Documentation
 
-https://petstore.swagger.io/?url=https://raw.githubusercontent.com/nightwolf93/brisk/master/brisk_openapi.yaml
+[Click here](Chttps://petstore.swagger.io/?url=https://raw.githubusercontent.com/nightwolf93/brisk/master/brisk_openapi.yaml)
 
 ## Docker
 
