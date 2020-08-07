@@ -2,11 +2,12 @@ package api
 
 import (
 	"fmt"
-	"github.com/nightwolf93/brisk/webhook"
 	"log"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/nightwolf93/brisk/webhook"
 
 	"github.com/gofiber/fiber"
 	"github.com/nightwolf93/brisk/storage"
@@ -103,6 +104,8 @@ func GetLink(c *fiber.Ctx) {
 	storage.SaveLink(link)
 
 	visitorEntry := storage.GetVisitorEntryByFiberCtx(c)
+	storage.SaveVisitorEntry(link, visitorEntry)
+	log.Printf("visitor on link=%s visitor=%s ip=%s", link.Slug, visitorEntry.Hash, visitorEntry.IP)
 
 	// Call webhooks
 	go webhook.CallWebhooks("visit_link", map[string]interface{}{

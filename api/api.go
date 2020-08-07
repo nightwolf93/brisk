@@ -1,11 +1,12 @@
 package api
 
 import (
-	"github.com/gofiber/fiber"
-	"github.com/nightwolf93/brisk/auth/middleware"
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/gofiber/fiber"
+	"github.com/nightwolf93/brisk/auth/middleware"
 )
 
 // Init the api http app
@@ -31,6 +32,7 @@ func Init() {
 
 	// Admin
 	app.Get("/api/v1/admin/link", AdminGetAllLinks)
+	app.Get("/api/v1/admin/link/:slug", AdminGetVisitors)
 	app.Get("/api/v1/admin/webhook", AdminGetWebhooks)
 
 	port := 3000

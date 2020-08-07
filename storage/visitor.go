@@ -1,16 +1,20 @@
 package storage
 
 import (
-	"github.com/alecthomas/geoip"
-	"github.com/gofiber/fiber"
+	"crypto/md5"
+	"encoding/hex"
 	"log"
 	"net"
 	"strings"
 	"time"
+
+	"github.com/alecthomas/geoip"
+	"github.com/gofiber/fiber"
 )
 
 // VisitorEntry is a entry for a unique visitor
 type VisitorEntry struct {
+	Hash      string `json:"hash"`
 	IP        string `json:"ip"`
 	Referrer  string `json:"referrer"`
 	Location  string `json:"location"`
@@ -30,6 +34,11 @@ func GetVisitorEntryByFiberCtx(c *fiber.Ctx) *VisitorEntry {
 	visitor.IP = ip
 	visitor.Referrer = string(c.Fasthttp.Referer())
 	visitor.Timestamp = int32(time.Now().Unix())
+
+	// Create hash
+	h := md5.New()
+	h.Write([]byte(ip))
+	visitor.Hash = hex.EncodeToString(h.Sum(nil))
 
 	// Check location
 	if c.IP() != "127.0.0.1" {
