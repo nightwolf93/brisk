@@ -50,7 +50,7 @@ func SaveLink(link *Link) error {
 	err := db.Update(func(txn *badger.Txn) error {
 		payload, _ := json.Marshal(link)
 		duration := time.Millisecond * time.Duration(link.TTL)
-		e := badger.NewEntry([]byte(fmt.Sprintf("link_%s", link.Slug)), []byte(string(payload))).WithTTL(time.Hour).WithTTL(duration)
+		e := badger.NewEntry([]byte(fmt.Sprintf("link_%s", link.Slug)), []byte(string(payload))).WithTTL(duration)
 		err := txn.SetEntry(e)
 		return err
 	})
@@ -62,7 +62,7 @@ func SaveVisitorEntry(link *Link, visitor *VisitorEntry) error {
 	err := db.Update(func(txn *badger.Txn) error {
 		payload, _ := json.Marshal(visitor)
 		duration := time.Millisecond * time.Duration(link.TTL)
-		e := badger.NewEntry([]byte(fmt.Sprintf("visitor/link_%s/%s", link.Slug, visitor.Hash)), []byte(string(payload))).WithTTL(time.Hour).WithTTL(duration)
+		e := badger.NewEntry([]byte(fmt.Sprintf("visitor/link_%s/%s", link.Slug, visitor.Hash)), []byte(string(payload))).WithTTL(duration)
 		err := txn.SetEntry(e)
 		return err
 	})

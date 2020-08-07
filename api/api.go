@@ -22,6 +22,7 @@ func Init() {
 	// Link
 	app.Put("/api/v1/link", CreateLink)
 	app.Delete("/api/v1/link", DeleteLink)
+	app.Patch("/api/v1/link", UpdateLink)
 	app.Get("/:slug", GetLink)
 
 	// Credentials

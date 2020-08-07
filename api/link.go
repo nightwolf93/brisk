@@ -26,6 +26,12 @@ type deleteLinkBody struct {
 	Slug string `json:"slug" xml:"slug" form:"slug"`
 }
 
+type updateLinkBody struct {
+	Slug string `json:"slug" xml:"slug" form:"slug"`
+	URL  string `json:"url" xml:"url" form:"url"`
+	TTL  int    `json:"ttl" xml:"ttl" form:"ttl"`
+}
+
 // CreateLink request to create a new link
 func CreateLink(c *fiber.Ctx) {
 	// Parse body
@@ -70,11 +76,12 @@ func CreateLink(c *fiber.Ctx) {
 	}
 
 	link := &storage.Link{
-		Slug:              slug,
-		URL:               body.URL,
-		TTL:               body.TTL,
-		Owner:             c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
-		CreateAtTimestamp: int32(time.Now().Unix()),
+		Slug:      slug,
+		URL:       body.URL,
+		TTL:       body.TTL,
+		Owner:     c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
+		UpdatedAt: int32(time.Now().Unix()),
+		CreateAt:  int32(time.Now().Unix()),
 	}
 	storage.SaveLink(link)
 
@@ -82,7 +89,8 @@ func CreateLink(c *fiber.Ctx) {
 	go webhook.CallWebhooks("new_link", map[string]interface{}{
 		"slug":       slug,
 		"owner":      c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
-		"created_at": link.CreateAtTimestamp,
+		"updated_at": link.UpdatedAt,
+		"created_at": link.CreateAt,
 		"ttl":        link.TTL,
 	})
 
@@ -147,5 +155,47 @@ func DeleteLink(c *fiber.Ctx) {
 	log.Printf("link deleted slug=%s", link.Slug)
 	storage.DeleteLink(link.Slug)
 
+	c.SendStatus(200)
+}
+
+func UpdateLink(c *fiber.Ctx) {
+	// Parse body
+	body := new(updateLinkBody)
+	if err := c.BodyParser(body); err != nil {
+		c.SendStatus(400)
+		return
+	}
+	link := storage.FindLink(body.Slug)
+
+	// Check if the link exist
+	if link == nil {
+		c.SendStatus(400)
+		return
+	}
+
+	// Check if is the link owner
+	if link.Owner != c.Locals("credential").(*storage.ClientPairCredentials).ClientID {
+		c.SendStatus(400)
+		return
+	}
+
+	// Update link
+	if body.TTL > 0 {
+		link.TTL = body.TTL
+	}
+	link.URL = body.URL
+	link.UpdatedAt = int32(time.Now().Unix())
+	storage.SaveLink(link)
+
+	// Call webhooks
+	go webhook.CallWebhooks("update_link", map[string]interface{}{
+		"slug":       link.Slug,
+		"owner":      c.Locals("credential").(*storage.ClientPairCredentials).ClientID,
+		"updated_at": link.UpdatedAt,
+		"created_at": link.CreateAt,
+		"ttl":        link.TTL,
+	})
+
+	log.Printf("link updated slug=%s", link.Slug)
 	c.SendStatus(200)
 }

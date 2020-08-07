@@ -10,4 +10,5 @@ require (
 	github.com/gofiber/utils v0.0.9
 	github.com/joho/godotenv v1.3.0
 	github.com/jstemmer/go-junit-report v0.9.1 // indirect
+	go.etcd.io/bbolt v1.3.5 // indirect
 )
