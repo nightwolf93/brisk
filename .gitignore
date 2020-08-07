@@ -9,3 +9,4 @@ vendor/
 localdb
 bin
 test-results
+.env
