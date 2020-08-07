@@ -5,11 +5,12 @@
 [![CircleCI](https://circleci.com/gh/nightwolf93/brisk.svg?style=svg)](https://github.com/nightwolf93/brisk)
 
 Brisk is a simple url shortener API.  
-It will allow you to create short url for temporary url like for a 2FA system.
+It will allow you to create short url for temporary url like for a 2FA system.  
+It also provide geoip detection for analytics
 
 ## Documentation
 
-[Click here](Chttps://petstore.swagger.io/?url=https://raw.githubusercontent.com/nightwolf93/brisk/master/brisk_openapi.yaml)
+https://nico-style931.gitbook.io/brisk/
 
 ## Docker
 
@@ -27,6 +28,22 @@ Brisk have a docker image here : https://hub.docker.com/r/nightwolf931/brisk
 #### Exposed port
 
 The exposed http port by Brisk is the port **3000**
+
+## Build
+
+```
+make build
+```
+
+```
+make docker
+```
+
+## Test
+
+```
+make test
+```
 
 ## Authors
 
