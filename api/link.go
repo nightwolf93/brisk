@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"strconv"
 	"time"
@@ -50,6 +51,12 @@ func CreateLink(c *fiber.Ctx) {
 
 	// Check slug length
 	if body.SlugLength > 20 || body.SlugLength < 3 {
+		c.SendStatus(400)
+		return
+	}
+
+	// Check if this is a url
+	if !isValidUrl(body.URL) {
 		c.SendStatus(400)
 		return
 	}
@@ -198,4 +205,18 @@ func UpdateLink(c *fiber.Ctx) {
 
 	log.Printf("link updated slug=%s", link.Slug)
 	c.SendStatus(200)
+}
+
+func isValidUrl(toTest string) bool {
+	_, err := url.ParseRequestURI(toTest)
+	if err != nil {
+		return false
+	}
+
+	u, err := url.Parse(toTest)
+	if err != nil || u.Scheme == "" || u.Host == "" {
+		return false
+	}
+
+	return true
 }
