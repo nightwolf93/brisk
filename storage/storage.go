@@ -13,7 +13,7 @@ var db *badger.DB = nil
 
 // Open the database file
 func Open() {
-	opts := badger.DefaultOptions("./localdb")
+	opts := badger.DefaultOptions("").WithInMemory(true)
 	opts.Logger = nil
 	conn, err := badger.Open(opts)
 	if err != nil {
@@ -47,7 +47,6 @@ func FindSecretByID(id string) string {
 
 // SaveLink save a new link in the db
 func SaveLink(link *Link) error {
-	db.RunValueLogGC(0.5)
 	err := db.Update(func(txn *badger.Txn) error {
 		payload, _ := json.Marshal(link)
 		duration := time.Millisecond * time.Duration(link.TTL)
@@ -72,7 +71,6 @@ func SaveVisitorEntry(link *Link, visitor *VisitorEntry) error {
 
 // FindLink find a link by the slug
 func FindLink(slug string) *Link {
-	db.RunValueLogGC(0.5)
 	var link *Link = nil
 	db.View(func(txn *badger.Txn) error {
 		item, err := txn.Get([]byte(fmt.Sprintf("link_%s", slug)))
@@ -90,7 +88,6 @@ func FindLink(slug string) *Link {
 
 // DeleteLink delete a link
 func DeleteLink(slug string) error {
-	db.RunValueLogGC(0.5)
 	err := db.Update(func(txn *badger.Txn) error {
 		err := txn.Delete([]byte(fmt.Sprintf("link_%s", slug)))
 		return err
@@ -100,10 +97,10 @@ func DeleteLink(slug string) error {
 
 // FindAllLinks find all links stored
 func FindAllLinks() ([]*Link, error) {
-	db.RunValueLogGC(0.5)
 	links := []*Link{}
 	err := db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
+		opts := badger.DefaultIteratorOptions
+		it := txn.NewIterator(opts)
 		defer it.Close()
 		prefix := []byte("link_")
 		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
@@ -111,15 +108,18 @@ func FindAllLinks() ([]*Link, error) {
 			if item == nil {
 				continue
 			}
-			err := item.Value(func(v []byte) error {
-				var link *Link = nil
-				json.Unmarshal(v, &link)
-				links = append(links, link)
-				return nil
-			})
+			valCopy, err := item.ValueCopy(nil)
 			if err != nil {
-				return err
+				log.Printf("%v", err)
+				continue
 			}
+			var link *Link = nil
+			err = json.Unmarshal(valCopy, &link)
+			if err != nil {
+				log.Printf("%v", err)
+				continue
+			}
+			links = append(links, link)
 		}
 		return nil
 	})
@@ -128,7 +128,6 @@ func FindAllLinks() ([]*Link, error) {
 
 // FindVisitorsForLink find all visitors entry for the link
 func FindVisitorsForLink(link *Link) ([]*VisitorEntry, error) {
-	db.RunValueLogGC(0.5)
 	visitors := []*VisitorEntry{}
 	err := db.View(func(txn *badger.Txn) error {
 		it := txn.NewIterator(badger.DefaultIteratorOptions)
