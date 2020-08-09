@@ -17,6 +17,7 @@ https://nico-style931.gitbook.io/brisk/
 | Package          | URL                                        |
 | ---------------- | ------------------------------------------ |
 | BriskDotNet (C#) | https://github.com/nightwolf93/BriskDotNet |
+| php-brisk (PHP)  | https://github.com/nightwolf93/php-brisk   |
 
 ## Docker
 
