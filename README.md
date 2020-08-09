@@ -12,6 +12,12 @@ It also provide geoip detection for analytics
 
 https://nico-style931.gitbook.io/brisk/
 
+## 3rd Party packages
+
+| Package          | URL                                        |
+| ---------------- | ------------------------------------------ |
+| BriskDotNet (C#) | https://github.com/nightwolf93/BriskDotNet |
+
 ## Docker
 
 Brisk have a docker image here : https://hub.docker.com/r/nightwolf931/brisk
